@@ -1,0 +1,71 @@
+public Program()
+{
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+}
+
+public void Save()
+{
+    // Called when the program needs to save its state. Use
+    // this method to save your state to the Storage field
+    // or some other means. 
+    // 
+    // This method is optional and can be removed if not
+    // needed.
+}
+
+public void Main(string argument, UpdateType updateSource)
+{
+     IMyMotorStator rotor_ro = (IMyMotorStator)GridTerminalSystem.GetBlockWithName("Rotor");
+     //rotor_ro.ApplyAction("IncreaseTorque");
+     //rotor_ro.ApplyAction("DecreaseVelocity");
+     IMyBatteryBlock bat = (IMyBatteryBlock)GridTerminalSystem.GetBlockWithName("Battery 7");
+     
+     //check current solar input condition.
+     bool a = bat.IsCharging;
+     Echo(a.ToString());
+     
+     
+     //initialize rotor to rotate
+
+     //define middle variable
+ 
+     //to the loop to decide anytime
+     
+      float current = bat.CurrentInput;
+      Echo("Current input");
+      Echo(current.ToString());
+      if (current<0.1)
+        {
+            float v = rotor_ro.GetValue<float>("Velocity");
+            Echo("Input 0.1- Velocity is ");
+            Echo(v.ToString());
+            if(v>-1 && v<1)
+            {
+                rotor_ro.ApplyAction("IncreaseVelocity");
+                Echo(v.ToString());
+            }
+        }
+        else
+        {
+            float v = rotor_ro.GetValue<float>("Velocity");
+            Echo("Input 0.1+ Velocity is ");
+            Echo(v.ToString());
+            if(v>1)
+            {
+                rotor_ro.ApplyAction("DecreaseVelocity");
+            }
+            else if(v<-1)
+            {
+                rotor_ro.ApplyAction("IncreaseVelocity");
+            }
+            else
+            {
+                Echo("stable");
+            }
+        }
+
+
+
+
+     //Echo("Done");
+}
